@@ -16,6 +16,7 @@
 8. 如果数据库中创建了相关表，请自行建立索引以加快程序速度(必加字段：ts_code,trade_date,end_date)
 9. 或运行 python command/cmd_setindex.py 添加索引
 
+<img width="824" alt="image" src="https://user-images.githubusercontent.com/6196607/167270427-f41d0768-b484-4444-9352-a91e541cb5e2.png">
 
 <img width="1134" alt="image" src="https://user-images.githubusercontent.com/6196607/167270291-5e0856a7-8e6e-4fb6-bcf6-4687836f1764.png">
 
