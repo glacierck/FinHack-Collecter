@@ -13,20 +13,24 @@ class tsFund:
     @tsMonitor
     def fund_basic(pro,db):
         table='fund_basic'
-        mysql.truncateTable(table,db)
+        #mysql.truncateTable(table,db)
+        mysql.exec("drop table if exists "+table+"_tmp",db)
         engine=mysql.getDBEngine(db)
         data=pro.fund_basic(market='E',status='D')
-        data.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
+        data.to_sql(table+"_tmp", engine, index=False, if_exists='append', chunksize=5000)
         data=pro.fund_basic(market='E',status='I')
-        data.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
+        data.to_sql(table+"_tmp", engine, index=False, if_exists='append', chunksize=5000)
         data=pro.fund_basic(market='E',status='L')
-        data.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
+        data.to_sql(table+"_tmp", engine, index=False, if_exists='append', chunksize=5000)
         data=pro.fund_basic(market='O',status='D')
-        data.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
+        data.to_sql(table+"_tmp", engine, index=False, if_exists='append', chunksize=5000)
         data=pro.fund_basic(market='O',status='I')
-        data.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
+        data.to_sql(table+"_tmp", engine, index=False, if_exists='append', chunksize=5000)
         data=pro.fund_basic(market='O',status='L')
-        data.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
+        data.to_sql(table+"_tmp", engine, index=False, if_exists='append', chunksize=5000)
+        mysql.exec('rename table '+table+' to '+table+'_old;',db);
+        mysql.exec('rename table '+table+'_tmp to '+table+';',db);
+        mysql.exec("drop table if exists "+table+'_old',db)
     
     @tsMonitor
     def fund_company(pro,db):
@@ -34,7 +38,8 @@ class tsFund:
     
     @tsMonitor
     def fund_manager(pro,db):
-        mysql.truncateTable('fund_manager',db)
+        table='fund_manager'
+        mysql.exec("drop table if exists "+table+"_tmp",db)
         engine=mysql.getDBEngine(db)
         data=tsSHelper.getAllFund(db)
         fund_list=data['ts_code'].tolist()
@@ -44,7 +49,7 @@ class tsFund:
             while True:
                 try:
                     df = pro.fund_manager(ts_code=','.join(code_list))
-                    df.to_sql('fund_manager', engine, index=False, if_exists='append', chunksize=5000)
+                    df.to_sql('fund_manager_tmp', engine, index=False, if_exists='append', chunksize=5000)
                     break
                 except Exception as e:
                     if "最多访问" in str(e):
@@ -56,6 +61,9 @@ class tsFund:
                         alert.send('fund_manager','函数异常',str(info))
                         print(info)
                         break
+        mysql.exec('rename table '+table+' to '+table+'_old;',db);
+        mysql.exec('rename table '+table+'_tmp to '+table+';',db);
+        mysql.exec("drop table if exists "+table+'_old',db)
     
     @tsMonitor
     def fund_share(pro,db):

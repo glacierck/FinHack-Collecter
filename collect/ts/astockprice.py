@@ -97,17 +97,11 @@ class tsAStockPrice:
     
     @tsMonitor
     def ggt_daily(pro,db):
-        mysql.truncateTable('astock_price_ggt_daily',db)
-        engine=mysql.getDBEngine(db)
-        data = pro.ggt_daily()
-        data.to_sql('astock_price_ggt_daily', engine, index=False, if_exists='append', chunksize=5000)
+        tsSHelper.getDataAndReplace(pro,'ggt_daily','astock_price_ggt_daily',db)
     
     @tsMonitor
     def ggt_monthly(pro,db):
-        mysql.truncateTable('astock_price_ggt_monthly',db)
-        engine=mysql.getDBEngine(db)
-        data = pro.ggt_monthly()
-        data.to_sql('astock_price_ggt_monthly', engine, index=False, if_exists='append', chunksize=5000)
+        tsSHelper.getDataAndReplace(pro,'ggt_monthly','astock_price_ggt_monthly',db)
     
     @tsMonitor
     def ccass_hold_detail(pro,db):

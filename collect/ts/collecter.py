@@ -5,10 +5,16 @@ from collect.ts.astockbasic import tsAStockBasic
 from collect.ts.astockprice import tsAStockPrice
 from collect.ts.astockfinance import tsAStockFinance
 from collect.ts.astockindex import tsAStockIndex
+from collect.ts.astockother import tsAStockOther
 from collect.ts.astockmarket import tsAStockMarket
+from collect.ts.futures import tsFuntures
 from collect.ts.fund import tsFund
 from collect.ts.other import tsOther
 from collect.ts.econo import tsEcono
+from collect.ts.ustock import tsUStock
+from collect.ts.hstock import tsHStock
+from collect.ts.cb import tsCB
+from collect.ts.fx import tsFX
 
 from library.thread import collectThread
 import tushare as ts
@@ -25,14 +31,22 @@ class tsCollecter:
         
         
     def getAll(self):
-        # self.getAStockBasic()
-        # self.getAStockPrice()
-        # self.getAStockFinance()
-        # self.getAStockMarket()
-        # self.getAStockIndex()
+        self.getAStockBasic()
+        self.getAStockPrice()
+        self.getAStockFinance()
+        self.getAStockMarket()
+        self.getAStockIndex()
+        self.getAStockOther()
         self.getFund()
         self.getEcono()
         self.getOther()
+        
+        self.getFutures()
+        
+        self.getUStock()
+        self.getHStock()
+        self.getCB()
+        self.getFX()
         
         
         for t in self.thread_list:
@@ -107,17 +121,23 @@ class tsCollecter:
      
     def getAStockIndex(self):
         tsAStockIndex.index_basic(self.pro,self.db)
+        tsAStockIndex.index_classify(self.pro,self.db)
+
         self.mTread(tsAStockIndex,'index_daily')
         self.mTread(tsAStockIndex,'index_weekly')
         self.mTread(tsAStockIndex,'index_monthly')
         self.mTread(tsAStockIndex,'index_weight')
         self.mTread(tsAStockIndex,'index_dailybasic')
-        self.mTread(tsAStockIndex,'index_classify')
         self.mTread(tsAStockIndex,'index_member')
         self.mTread(tsAStockIndex,'daily_info')
         self.mTread(tsAStockIndex,'sz_daily_info')
-        self.mTread(tsAStockIndex,'ths_daily')
         pass
+
+    def getAStockOther(self):
+        self.mTread(tsAStockOther,'report_rc')
+        self.mTread(tsAStockOther,'cyq_perf')
+        self.mTread(tsAStockOther,'cyq_chips')
+        #broker_recommend
     
     def getFund(self):
         tsFund.fund_basic(self.pro,self.db)
@@ -148,8 +168,40 @@ class tsCollecter:
         self.mTread(tsEcono,'us_tbr')
         self.mTread(tsEcono,'us_tltr')
         self.mTread(tsEcono,'us_trltr')
+        self.mTread(tsEcono,'eco_cal')
         pass
 
+    def getFutures(self):
+        self.mTread(tsFuntures,'fut_basic')
+        self.mTread(tsFuntures,'trade_cal')
+        self.mTread(tsFuntures,'fut_daily')
+        self.mTread(tsFuntures,'fut_holding')
+        pass
+
+    def getUStock(self):
+        tsUStock.us_basic(self.pro,self.db)
+        self.mTread(tsUStock,'us_tradecal')
+        self.mTread(tsUStock,'us_daily')
+        pass
+
+    def getHStock(self):
+        tsHStock.hk_basic(self.pro,self.db)
+        self.mTread(tsHStock,'hk_tradecal')
+        self.mTread(tsHStock,'hk_daily')
+        pass
+
+    def getCB(self):
+        tsCB.cb_basic(self.pro,self.db)
+        self.mTread(tsCB,'cb_issue')
+        self.mTread(tsCB,'cb_call')
+        self.mTread(tsCB,'cb_daily')
+        #elf.mTread(tsCB,'cb_price_chg')
+        pass    
+    
+    def getFX(self):
+        tsFX.fx_basic(self.pro,self.db)
+        self.mTread(tsFX,'fx_daily')
+        pass   
 
     def getOther(self):
         self.mTread(tsOther,'cctv_news')
