@@ -204,7 +204,7 @@ class tsCollecter:
         pass   
 
     def getOther(self):
-        self.mTread(tsOther,'cctv_news')
+        #self.mTread(tsOther,'cctv_news')
         pass
     
     def mTread(self,className,functionName):
