@@ -82,7 +82,7 @@ class tsAStockFinance:
   
         for ts_code in stock_list:
             if datetime.datetime.now().second==0:
-                print(api+","+ts_code+","+str(report_type))
+                print(api+","+ts_code+",report_type="+str(report_type))
             diff_list=tsAStockFinance.getEndDateListDiff(table,ts_code,db)
             #print(diff_list)
             #exit()
@@ -132,6 +132,7 @@ class tsAStockFinance:
                             df=f(ts_code=ts_code,start_date=end_list[0],end_date=datetime.datetime.now().strftime('%Y%m%d'),fileds=fileds,report_type=report_type)
                         else:
                             df=f(ts_code=ts_code,period=end_list[-1],fileds=fileds,report_type=report_type)
+                    #有些api没有report type字段
                     else:
                         if len(end_list)>1:
                             df=f(ts_code=ts_code,start_date=end_list[0],end_date=datetime.datetime.now().strftime('%Y%m%d'),fileds=fileds)
@@ -141,7 +142,7 @@ class tsAStockFinance:
                     break
                 except Exception as e:
                     if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
-                        print(self.func.__name__+":触发最多访问。\n"+str(e)) 
+                        print("api:触发最多访问。\n"+str(e)) 
                         return
                     if "最多访问" in str(e):
                         print(api+":触发限流，等待重试。\n"+str(e))
@@ -197,7 +198,7 @@ class tsAStockFinance:
                         break
                     except Exception as e:
                         if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
-                            print(self.func.__name__+":触发最多访问。\n"+str(e)) 
+                            print("disclosure_date:触发最多访问。\n"+str(e)) 
                             return
                         if "最多访问" in str(e):
                             print("disclosure_date:触发限流，等待重试。\n"+str(e))
@@ -254,7 +255,7 @@ class tsAStockFinance:
                     break
                 except Exception as e:
                     if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
-                        print(self.func.__name__+":触发最多访问。\n"+str(e)) 
+                        print("dividend:触发最多访问。\n"+str(e)) 
                         return
                     if "最多访问" in str(e):
                         print("dividend:触发限流，等待重试。\n"+str(e))
