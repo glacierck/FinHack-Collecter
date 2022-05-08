@@ -71,6 +71,9 @@ class tsAStockBasic:
                     df.to_sql('astock_stk_rewards_tmp', engine, index=False, if_exists='append', chunksize=5000)
                     break
                 except Exception as e:
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print(self.func.__name__+":触发最多访问。\n"+str(e)) 
+                        return
                     if "最多访问" in str(e):
                         print(self.func.__name__+":触发限流，等待重试。\n"+str(e))
                         time.sleep(15)

@@ -31,7 +31,10 @@ class tsAStockOther:
                     df.to_sql('astock_other_report_rc', engine, index=False, if_exists='append', chunksize=5000)
                     break
                 except Exception as e:
-                    if "最多访问" in str(e):
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print("report_rc:触发最多访问。\n"+str(e))
+                        return
+                    elif "每分钟最多访问" in str(e):
                         print("report_rc:触发限流，等待重试。\n"+str(e))
                         time.sleep(15)
                         continue
@@ -39,6 +42,7 @@ class tsAStockOther:
                         info = traceback.format_exc()
                         alert.send('report_rc','函数异常',str(info))
                         print(info)  
+                        return
                         
  
     @tsMonitor
@@ -54,7 +58,10 @@ class tsAStockOther:
                     df.to_sql('astock_other_cyq_perf', engine, index=False, if_exists='append', chunksize=5000)
                     break
                 except Exception as e:
-                    if "最多访问" in str(e):
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print("cyq_perf:触发最多访问。\n"+str(e))
+                        return
+                    elif "每分钟最多访问" in str(e):
                         print("cyq_perf:触发限流，等待重试。\n"+str(e))
                         time.sleep(15)
                         continue
@@ -62,6 +69,7 @@ class tsAStockOther:
                         info = traceback.format_exc()
                         alert.send('cyq_perf','函数异常',str(info))
                         print(info)   
+                        return
  
 
     @tsMonitor
@@ -77,7 +85,10 @@ class tsAStockOther:
                     df.to_sql('astock_other_cyq_chips', engine, index=False, if_exists='append', chunksize=5000)
                     break
                 except Exception as e:
-                    if "最多访问" in str(e):
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print("cyq_chips:触发最多访问。\n"+str(e))
+                        return
+                    elif "每分钟最多访问" in str(e):
                         print("cyq_chips:触发限流，等待重试。\n"+str(e))
                         time.sleep(15)
                         continue
@@ -85,6 +96,7 @@ class tsAStockOther:
                         info = traceback.format_exc()
                         alert.send('cyq_chips','函数异常',str(info))
                         print(info)     
+                        return
     
     
     

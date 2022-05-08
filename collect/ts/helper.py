@@ -106,7 +106,7 @@ class tsSHelper:
                         time.sleep(15)
                         continue
                     
-                    elif "每天最多访问" in str(e):
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
                         print(api+":今日权限用完。\n"+str(e))
                         return
                          
@@ -145,7 +145,7 @@ class tsSHelper:
                         time.sleep(15)
                         continue
                     
-                    elif "每天最多访问" in str(e):
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
                         print(api+":今日权限用完。\n"+str(e))
                         return
                    

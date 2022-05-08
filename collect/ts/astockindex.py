@@ -34,6 +34,9 @@ class tsAStockIndex:
                         #print(df)
                     break
                 except Exception as e:
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print(self.func.__name__+":触发最多访问。\n"+str(e)) 
+                        return
                     if "最多访问" in str(e):
                         print('index_daily'+":触发限流，等待重试。\n"+str(e))
                         time.sleep(15)
@@ -66,10 +69,10 @@ class tsAStockIndex:
     def index_classify(pro,db):
         tsSHelper.getDataAndReplace(pro,'index_classify','astock_index_classify',db)
     
-    @tsMonitor
-    def index_member(pro,db):
-        tsSHelper.getDataWithCodeAndClear(pro,'index_member','astock_index_member',db)
-        pass
+    # @tsMonitor
+    # def index_member(pro,db):
+    #     tsSHelper.getDataWithCodeAndClear(pro,'index_member','astock_index_member',db)
+    #     pass
     
     @tsMonitor
     def daily_info(pro,db):
@@ -155,6 +158,9 @@ class tsAStockIndex:
                     df.to_sql('astock_index_weight', engine, index=False, if_exists='append', chunksize=5000)
                     break
                 except Exception as e:
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print(self.func.__name__+":触发最多访问。\n"+str(e)) 
+                        return
                     if "最多访问" in str(e):
                         print("index_weight:触发限流，等待重试。\n"+str(e))
                         time.sleep(15)
@@ -207,33 +213,39 @@ class tsAStockIndex:
 
 
     
-    # @tsMonitor
-    # def index_member(pro,db):
-    #     mysql.truncateTable('astock_index_member',db)
-    #     engine=mysql.getDBEngine(db)
-    #     sql='select * from astock_index_classify'
-    #     data=mysql.selectToDf(sql,db)
+    @tsMonitor
+    def index_member(pro,db):
+        table='astock_index_member'
+        mysql.exec("drop table if exists "+table+"_tmp",db)
+        engine=mysql.getDBEngine(db)
+        sql='select * from astock_index_classify'
+        data=mysql.selectToDf(sql,db)
 
-    #     index_code_list=data['index_code'].to_list()
-    #     for index_code in index_code_list:
-    #         while True:
-    #             try:
-    #                 df = pro.index_member(index_code=index_code)
-    #                 df = df.rename({'is_new':'isnew'}, axis='columns')
-    #                 if(not df.empty):
-    #                     df.to_sql('astock_index_member', engine, index=False, if_exists='append', chunksize=5000)
-    #                 break
-    #             except Exception as e:
-    #                 if "最多访问" in str(e):
-    #                     print("astock_index_member:触发限流，等待重试。\n"+str(e))
-    #                     time.sleep(15)
-    #                     continue
-    #                 else:
-    #                     info = traceback.format_exc()
-    #                     alert.send('astock_index_member','函数异常',str(info))
-    #                     print(info)  
+        index_code_list=data['index_code'].to_list()
+        for index_code in index_code_list:
+            while True:
+                try:
+                    df = pro.index_member(index_code=index_code,fileds="index_code,index_name,con_code,con_name,in_date,out_date,is_new")
+                    df = df.rename({'is_new':'isnew'}, axis='columns')
+                    if(not df.empty):
+                        df.to_sql('astock_index_member_tmp', engine, index=False, if_exists='append', chunksize=5000)
+                    break
+                except Exception as e:
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print(self.func.__name__+":触发最多访问。\n"+str(e)) 
+                        return
+                    if "最多访问" in str(e):
+                        print("astock_index_member:触发限流，等待重试。\n"+str(e))
+                        time.sleep(15)
+                        continue
+                    else:
+                        info = traceback.format_exc()
+                        alert.send('astock_index_member','函数异常',str(info))
+                        print(info)  
 
-
+        mysql.exec('rename table '+table+' to '+table+'_old;',db)
+        mysql.exec('rename table '+table+'_tmp to '+table+';',db)
+        mysql.exec("drop table if exists "+table+'_old',db)
     
     # @tsMonitor
     # def daily_info(pro,db):
