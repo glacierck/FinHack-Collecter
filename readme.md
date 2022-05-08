@@ -9,7 +9,7 @@
 ### 使用方法
 1. git clone https://github.com/FinHackCN/FinHack-Collecter.git
 2. git clone https://github.com/FinHackCN/FinHack-Library.git
-3. ln -s `pwd`/FinHack-Library FinHack-Collecter/library
+3. ln -s \`pwd\`/FinHack-Library FinHack-Collecter/library
 4. pip(3) install -r requirements.txt
 5. 重命名config目录下 *.conf.example 为 *.conf
 6. 根据.conf文件中的提示信息修改配置文件
