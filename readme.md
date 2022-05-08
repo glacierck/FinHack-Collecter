@@ -1,9 +1,10 @@
-# FinHack-Collecter抢先版
+# FinHack-Collecter
 ## A股行情、财务数据一键采集(基于tushare.pro)
 ### 使用依赖
 1. Python 3.7+ 版本(我是在Python3.8下搞的)
 2. https://waditu.com 至少2000积分的权限(约200元人民币)
 3. 一些Python基础
+4. library目录依赖FinHack-Library项目
 
 ### 使用方法
 1. git clone https://github.com/FinHackCN/FinHack-Collecter.git
