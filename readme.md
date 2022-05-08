@@ -9,15 +9,16 @@
 ### 使用方法
 1. git clone https://github.com/FinHackCN/FinHack-Collecter.git
 2. git clone https://github.com/FinHackCN/FinHack-Library.git
-3. ln -s \`pwd\`/FinHack-Library FinHack-Collecter/library
-4. pip(3) install -r requirements.txt
-5. 重命名config目录下 *.conf.example 为 *.conf
-6. 根据.conf文件中的提示信息修改配置文件
-7. python(3) command/cmd_collect.py 
-8. 理论上不能一次跑通，请自己修bug
-9. 首次运行会比较慢，请耐心等待
-10. 如果数据库中创建了相关表，请自行建立索引以加快程序速度(必加字段：ts_code,trade_date,end_date)
-11. 或运行 python command/cmd_setindex.py 添加索引
+3. rm FinHack-Collecter/library
+4. ln -s \`pwd\`/FinHack-Library FinHack-Collecter/library
+5. pip(3) install -r requirements.txt
+6. 重命名config目录下 *.conf.example 为 *.conf
+7. 根据.conf文件中的提示信息修改配置文件
+8. python(3) command/cmd_collect.py 
+9. 理论上不能一次跑通，请自己修bug
+10. 首次运行会比较慢，请耐心等待
+11. 如果数据库中创建了相关表，请自行建立索引以加快程序速度(必加字段：ts_code,trade_date,end_date)
+12. 或运行 python command/cmd_setindex.py 添加索引
 
 <img width="824" alt="image" src="https://user-images.githubusercontent.com/6196607/167270427-f41d0768-b484-4444-9352-a91e541cb5e2.png">
 
