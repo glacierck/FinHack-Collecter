@@ -14,6 +14,11 @@
 6. 理论上不能一次跑通，请自己修bug
 7. 首次运行会比较慢，请耐心等待
 8. 如果数据库中创建了相关表，请自行建立索引以加快程序速度(必加字段：ts_code,trade_date,end_date)
+9. 或运行 python command/cmd_setindex.py 添加索引
+
+<img width="824" alt="image" src="https://user-images.githubusercontent.com/6196607/167270427-f41d0768-b484-4444-9352-a91e541cb5e2.png">
+
+<img width="1134" alt="image" src="https://user-images.githubusercontent.com/6196607/167270291-5e0856a7-8e6e-4fb6-bcf6-4687836f1764.png">
 
 ### 目录结构
 #### collect
@@ -104,10 +109,7 @@
 * 申万行业成分
 * 沪深市场每日交易统计
 * 深圳市场每日交易情况
-* 同花顺概念和行业列表
-* 同花顺概念和行业指数行情
- 
-### 下期增加数据(12月19日前，仍为tushare.pro数据)
+
 #### 公募基金
 * 基金列表
 * 基金管理人
@@ -119,16 +121,13 @@
 * 基金行情
 * 复权因子
 
-### 未来支持数据(计划未定，tushare.pro数据)
+### 其它数据
 * 期货
-* 期权
 * 债券
 * 外汇
 * 港股
 * 美股
-* 行业经济
 * 宏观经济
-* 另类数据
 
 
 
