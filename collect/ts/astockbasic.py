@@ -35,6 +35,7 @@ class tsAStockBasic:
         mysql.exec('rename table '+table+' to '+table+'_old;',db);
         mysql.exec('rename table '+table+'_tmp to '+table+';',db);
         mysql.exec("drop table if exists "+table+'_old',db)
+        tsSHelper.setIndex(table,db)
        
     @tsMonitor 
     def stock_company(pro,db):
@@ -48,6 +49,7 @@ class tsAStockBasic:
         mysql.exec('rename table '+table+' to '+table+'_old;',db);
         mysql.exec('rename table '+table+'_tmp to '+table+';',db);
         mysql.exec("drop table if exists "+table+'_old',db)
+        tsSHelper.setIndex(table,db)
     
     @tsMonitor
     def stk_managers(pro,db):
@@ -87,6 +89,7 @@ class tsAStockBasic:
         mysql.exec('rename table '+table+' to '+table+'_old;',db);
         mysql.exec('rename table '+table+'_tmp to '+table+';',db);
         mysql.exec("drop table if exists "+table+'_old',db)
+        tsSHelper.setIndex(table,db)
         
     @tsMonitor       
     def new_share(pro,db):

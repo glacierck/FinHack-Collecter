@@ -32,6 +32,12 @@ class tsSHelper:
         return data
   
   
+    def setIndex(table,db='default'):
+        index_list=['ts_code','end_date','trade_date']
+        for index in index_list:
+            sql="CREATE INDEX "+index+" ON "+table+" ("+index+"(10)) "
+            mysql.exec(sql,db)
+  
     def getAllFund(db='default'):
         sql='select * from fund_basic'
         data=mysql.selectToDf(sql,db)
@@ -48,6 +54,7 @@ class tsSHelper:
         mysql.exec('rename table '+table+' to '+table+'_old;',db);
         mysql.exec('rename table '+table+'_tmp to '+table+';',db);
         mysql.exec("drop table if exists "+table+'_old',db)
+        tsSHelper.setIndex(table,db)
     
     
     #根据最后日期获取数据
@@ -161,6 +168,7 @@ class tsSHelper:
         mysql.exec('rename table '+table+' to '+table+'_old;',db);
         mysql.exec('rename table '+table+'_tmp to '+table+';',db);
         mysql.exec("drop table if exists "+table+'_old',db)
+        tsSHelper.setIndex(table,db)
         
     
     #查一下最后的数据是哪天

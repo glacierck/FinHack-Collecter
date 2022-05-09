@@ -268,6 +268,7 @@ class tsAStockFinance:
         mysql.exec('rename table '+table+' to '+table+'_old;',db);
         mysql.exec('rename table '+table+'_tmp to '+table+';',db);
         mysql.exec("drop table if exists "+table+'_old',db)
+        tsSHelper.setIndex(table,db)
             
     @tsMonitor
     def fina_indicator(pro,db):
