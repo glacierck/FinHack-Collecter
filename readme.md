@@ -1,5 +1,7 @@
 # FinHack-Collecter
 ## A股行情、财务数据一键采集(基于tushare.pro)
+![公众号FinHack炼金术](https://user-images.githubusercontent.com/6196607/167310317-73abbb70-f94a-43d7-8bcd-c598f4a5b43b.jpg)
+
 ### 使用依赖
 1. Python 3.7+ 版本(我是在Python3.8下搞的)
 2. https://waditu.com 至少2000积分的权限(约200元人民币)
