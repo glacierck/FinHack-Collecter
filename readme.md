@@ -9,6 +9,7 @@
 4. library目录依赖FinHack-Library项目
 
 ### 使用方法
+[《从零开始卷量化(51)-跟我一键拉取全部A股、基金、可转债以及期货的行情数据！》](https://mp.weixin.qq.com/s/jWH2s3gigl4M1qg27NQMaA)
 1. git clone https://github.com/FinHackCN/FinHack-Collecter.git
 2. git clone https://github.com/FinHackCN/FinHack-Library.git
 3. rm FinHack-Collecter/library
