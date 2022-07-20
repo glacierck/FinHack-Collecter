@@ -83,7 +83,7 @@ class tsAStockFinance:
         for ts_code in stock_list:
             if datetime.datetime.now().second==0:
                 print(api+","+ts_code+",report_type="+str(report_type))
-            diff_list=tsAStockFinance.getEndDateListDiff(table,ts_code,db)
+            diff_list=tsAStockFinance.getEndDateListDiff(table,ts_code,db,report_type)
             #print(diff_list)
             #exit()
             
@@ -97,7 +97,7 @@ class tsAStockFinance:
                 lastdate=lastdate['max'].tolist()[0]
             if lastdate==None:
                 lastdate='20000321'
-            diff_count=tsAStockFinance.getLastDateCountDiff(table,lastdate,ts_code,db)
+            diff_count=tsAStockFinance.getLastDateCountDiff(table,lastdate,ts_code,db,report_type)
             if(diff_count):
                 sql="delete from "+table+" where ts_code='"+ts_code+"' and end_date='"+lastdate+"'"
                 if(report_type>0):
