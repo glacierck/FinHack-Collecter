@@ -1,19 +1,31 @@
-# FinHack-Collecter抢先版
+# FinHack-Collecter
 ## A股行情、财务数据一键采集(基于tushare.pro)
+![公众号FinHack炼金术](https://user-images.githubusercontent.com/6196607/167310317-73abbb70-f94a-43d7-8bcd-c598f4a5b43b.jpg)
+
 ### 使用依赖
 1. Python 3.7+ 版本(我是在Python3.8下搞的)
 2. https://waditu.com 至少2000积分的权限(约200元人民币)
 3. 一些Python基础
+4. library目录依赖FinHack-Library项目
 
 ### 使用方法
+[《从零开始卷量化(51)-跟我一键拉取全部A股、基金、可转债以及期货的行情数据！》](https://mp.weixin.qq.com/s/jWH2s3gigl4M1qg27NQMaA)
 1. git clone https://github.com/FinHackCN/FinHack-Collecter.git
-2. pip(3) install -r requirements.txt
-3. 重命名config目录下 *.conf.example 为 *.conf
-4. 根据.conf文件中的提示信息修改配置文件
-5. python(3) command/cmd_collect.py 
-6. 理论上不能一次跑通，请自己修bug
-7. 首次运行会比较慢，请耐心等待
-8. 如果数据库中创建了相关表，请自行建立索引以加快程序速度(必加字段：ts_code,trade_date,end_date)
+2. git clone https://github.com/FinHackCN/FinHack-Library.git
+3. rm FinHack-Collecter/library
+4. ln -s \`pwd\`/FinHack-Library FinHack-Collecter/library
+5. pip(3) install -r requirements.txt
+6. 重命名config目录下 *.conf.example 为 *.conf
+7. 根据.conf文件中的提示信息修改配置文件
+8. python(3) command/cmd_collect.py 
+9. 理论上不能一次跑通，请自己修bug
+10. 首次运行会比较慢，请耐心等待
+11. 如果数据库中创建了相关表，请自行建立索引以加快程序速度(必加字段：ts_code,trade_date,end_date)
+12. 或运行 python command/cmd_setindex.py 添加索引
+
+<img width="824" alt="image" src="https://user-images.githubusercontent.com/6196607/167270427-f41d0768-b484-4444-9352-a91e541cb5e2.png">
+
+<img width="1134" alt="image" src="https://user-images.githubusercontent.com/6196607/167270291-5e0856a7-8e6e-4fb6-bcf6-4687836f1764.png">
 
 ### 目录结构
 #### collect
@@ -104,10 +116,7 @@
 * 申万行业成分
 * 沪深市场每日交易统计
 * 深圳市场每日交易情况
-* 同花顺概念和行业列表
-* 同花顺概念和行业指数行情
- 
-### 下期增加数据(12月19日前，仍为tushare.pro数据)
+
 #### 公募基金
 * 基金列表
 * 基金管理人
@@ -119,16 +128,13 @@
 * 基金行情
 * 复权因子
 
-### 未来支持数据(计划未定，tushare.pro数据)
+### 其它数据
 * 期货
-* 期权
 * 债券
 * 外汇
 * 港股
 * 美股
-* 行业经济
 * 宏观经济
-* 另类数据
 
 
 

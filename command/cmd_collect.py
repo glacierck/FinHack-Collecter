@@ -1,7 +1,10 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.realpath(__file__))+"/../")
-sys.path.append(os.path.dirname(os.path.realpath(__file__))+"/../ts/")
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(__file__))+"/collect")
+sys.path.append(os.path.dirname(os.path.dirname(__file__))+"/collect/ts")
+
 import datetime
 from library.alert import alert
 from collect.ts.collecter import tsCollecter

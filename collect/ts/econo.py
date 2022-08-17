@@ -73,4 +73,9 @@ class tsEcono:
     @tsMonitor
     def us_trltr(pro,db):
         tsSHelper.getDataWithLastDate(pro,'us_trltr','econo_us_trltr',db,'date')
+        
+    @tsMonitor
+    def eco_cal(pro,db):
+        tsSHelper.getDataWithLastDate(pro,'eco_cal','econo_cal',db,'date')       
+        
     

@@ -51,10 +51,7 @@ class tsAStockMarket:
     
     @tsMonitor
     def concept(pro,db):
-        mysql.truncateTable('astock_market_concept',db)
-        engine=mysql.getDBEngine(db)
-        data = pro.concept()
-        data.to_sql('astock_market_concept', engine, index=False, if_exists='append', chunksize=5000)
+        tsSHelper.getDataAndReplace(pro,'concept','astock_market_concept',db)
     
     @tsMonitor
     def concept_detail(pro,db):

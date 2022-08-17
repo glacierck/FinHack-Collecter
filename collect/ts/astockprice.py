@@ -24,6 +24,9 @@ class tsAStockPrice:
                     df=f(trade_date=day)
                     break
                 except Exception as e:
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print(api+":触发最多访问。\n"+str(e)) 
+                        return
                     if "最多访问" in str(e):
                         print(api+":触发限流，等待重试。\n"+str(e))
                         time.sleep(15)
@@ -97,17 +100,11 @@ class tsAStockPrice:
     
     @tsMonitor
     def ggt_daily(pro,db):
-        mysql.truncateTable('astock_price_ggt_daily',db)
-        engine=mysql.getDBEngine(db)
-        data = pro.ggt_daily()
-        data.to_sql('astock_price_ggt_daily', engine, index=False, if_exists='append', chunksize=5000)
+        tsSHelper.getDataAndReplace(pro,'ggt_daily','astock_price_ggt_daily',db)
     
     @tsMonitor
     def ggt_monthly(pro,db):
-        mysql.truncateTable('astock_price_ggt_monthly',db)
-        engine=mysql.getDBEngine(db)
-        data = pro.ggt_monthly()
-        data.to_sql('astock_price_ggt_monthly', engine, index=False, if_exists='append', chunksize=5000)
+        tsSHelper.getDataAndReplace(pro,'ggt_monthly','astock_price_ggt_monthly',db)
     
     @tsMonitor
     def ccass_hold_detail(pro,db):

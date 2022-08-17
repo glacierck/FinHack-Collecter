@@ -32,18 +32,32 @@ class tsSHelper:
         return data
   
   
+    def setIndex(table,db='default'):
+        index_list=['ts_code','end_date','trade_date']
+        for index in index_list:
+            sql="CREATE INDEX "+index+" ON "+table+" ("+index+"(10)) "
+            mysql.exec(sql,db)
+  
     def getAllFund(db='default'):
         sql='select * from fund_basic'
         data=mysql.selectToDf(sql,db)
         return data      
-        
+       
+    #重新获取数据 
     def getDataAndReplace(pro,api,table,db):
-        mysql.truncateTable(table,db)
+        mysql.exec("drop table if exists "+table+"_tmp",db)
+        #mysql.truncateTable(table,db)
         engine=mysql.getDBEngine(db)
         f = getattr(pro, api)
         data = f()
-        data.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
+        data.to_sql(table+"_tmp", engine, index=False, if_exists='append', chunksize=5000)
+        mysql.exec('rename table '+table+' to '+table+'_old;',db);
+        mysql.exec('rename table '+table+'_tmp to '+table+';',db);
+        mysql.exec("drop table if exists "+table+'_old',db)
+        tsSHelper.setIndex(table,db)
     
+    
+    #根据最后日期获取数据
     def getDataWithLastDate(pro,api,table,db,filed='trade_date',ts_code=''):
         engine=mysql.getDBEngine(db)
         lastdate=tsSHelper.getLastDateAndDelete(table=table,filed=filed,ts_code=ts_code,db=db)
@@ -68,6 +82,8 @@ class tsSHelper:
                             df=f(date=day)
                         elif(filed=='nav_date'):
                             df=f(nav_date=day)
+                        elif(filed=='cal_date'):
+                            df=f(cal_date=day)
                         else:
                             alert.send(api,'函数异常',filed+"未处理")
                     else:
@@ -81,6 +97,8 @@ class tsSHelper:
                             df=f(date=day,ts_code=ts_code)  
                         elif(filed=='nav_date'):
                             df=f(nav_date=day,ts_code=ts_code)
+                        elif(filed=='cal_date'):
+                            df=f(cal_date=day)
                         else:
                             alert.send(api,'函数异常',filed+"未处理")
                     
@@ -90,23 +108,34 @@ class tsSHelper:
                         res = df.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
                     break
                 except Exception as e:
-                    if "最多访问" in str(e):
+                    if "每分钟最多访问" in str(e):
                         print(api+":触发限流，等待重试。\n"+str(e))
                         time.sleep(15)
                         continue
+                    
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print(api+":今日权限用完。\n"+str(e))
+                        return
+                         
+                   
+                    elif "您没有访问该接口的权限" in str(e):
+                        print(api+":没有访问该接口的权限。\n"+str(e))
+                        return
+                    
                     else:
                         info = traceback.format_exc()
                         alert.send(api,'函数异常',str(info))
                         
                         print(api+"\n"+info)
-                        break
+                        return
             #print(table+'-'+str(len(df))+'-'+day)
 
             i=i+1        
             
     
     def getDataWithCodeAndClear(pro,api,table,db):
-        mysql.truncateTable(table,db)
+        #mysql.truncateTable(table,db)
+        mysql.exec("drop table if exists "+table+"_tmp",db)
         engine=mysql.getDBEngine(db)
         data=tsSHelper.getAllAStock(True,pro,db)
         stock_list=data['ts_code'].tolist()
@@ -115,18 +144,31 @@ class tsSHelper:
             while True:
                 try:
                     df =f(ts_code=code)
-                    df.to_sql(table, engine, index=False, if_exists='append', chunksize=5000)
+                    df.to_sql(table+"_tmp", engine, index=False, if_exists='append', chunksize=5000)
                     break
                 except Exception as e:
-                    if "最多访问" in str(e):
+                    if "每分钟最多访问" in str(e):
                         print(api+":触发限流，等待重试。\n"+str(e))
                         time.sleep(15)
                         continue
+                    
+                    if "每天最多访问" in str(e) or "每小时最多访问" in str(e):
+                        print(api+":今日权限用完。\n"+str(e))
+                        return
+                   
+                    elif "您没有访问该接口的权限" in str(e):
+                        print(api+":没有访问该接口的权限。\n"+str(e))
+                        return
+                    
                     else:
                         info = traceback.format_exc()
                         alert.send(api,'函数异常',str(info))
-                        print(info)
-                        break
+                        return
+     
+        mysql.exec('rename table '+table+' to '+table+'_old;',db);
+        mysql.exec('rename table '+table+'_tmp to '+table+';',db);
+        mysql.exec("drop table if exists "+table+'_old',db)
+        tsSHelper.setIndex(table,db)
         
     
     #查一下最后的数据是哪天
